@@ -148,6 +148,11 @@ public class CanalController {
                                     public void handleNewSession() throws Exception {
                                         initCid(path);
                                     }
+
+                    				@Override
+                    				public void handleSessionEstablishmentError(Throwable error) throws Exception {
+                    					logger.warn("zk session cannot be re-established.", error);
+                    				}
                                 });
                             }
                         } finally {
@@ -380,6 +385,11 @@ public class CanalController {
                 public void handleNewSession() throws Exception {
                     initCid(path);
                 }
+
+				@Override
+				public void handleSessionEstablishmentError(Throwable error) throws Exception {
+					logger.warn("zk session cannot be re-established.", error);
+				}
             });
         }
         // 优先启动embeded服务

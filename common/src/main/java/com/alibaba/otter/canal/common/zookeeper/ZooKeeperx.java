@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.zookeeper.ClientCnxn;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.Op;
+import org.apache.zookeeper.OpResult;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.ZooKeeper;
@@ -21,6 +23,7 @@ import org.apache.zookeeper.ZooKeeper.States;
 import org.apache.zookeeper.client.ConnectStringParser;
 import org.apache.zookeeper.client.HostProvider;
 import org.apache.zookeeper.client.StaticHostProvider;
+import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,4 +180,26 @@ public class ZooKeeperx implements IZkConnection {
         }
 
     }
+
+	@Override
+	public String create(String path, byte[] data, List<ACL> acl, CreateMode mode)
+			throws KeeperException, InterruptedException {
+		return _zk.create(path, data, acl, mode);
+	}
+
+	@Override
+	public Stat writeDataReturnStat(String path, byte[] data, int expectedVersion)
+			throws KeeperException, InterruptedException {
+		return _zk.setData(path, data, expectedVersion);
+	}
+
+	@Override
+	public List<OpResult> multi(Iterable<Op> ops) throws KeeperException, InterruptedException {
+		return _zk.multi(ops);
+	}
+
+	@Override
+	public void addAuthInfo(String scheme, byte[] auth) {
+		_zk.addAuthInfo(scheme, auth);		
+	}
 }
